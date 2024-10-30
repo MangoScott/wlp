@@ -4,40 +4,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Women's Lunch Place - Donation Impact Calculator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/14.0.0/material-components-web.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --md-sys-color-primary: #2e7d32;
+            --md-sys-color-primary-container: #e8f5e9;
+            --md-sys-color-secondary: #fdd835;
+            --md-sys-color-secondary-container: #fff8e1;
+            --md-sys-color-surface: #ffffff;
+            --md-sys-color-surface-container: #f5f5f5;
+            --md-sys-color-outline: #dadce0;
+            --md-elevation-1: 0 1px 2px rgba(0,0,0,0.3);
+            --md-elevation-2: 0 2px 4px rgba(0,0,0,0.3);
+            --md-elevation-3: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f3f4f6;
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--md-sys-color-surface-container);
             margin: 0;
-            padding: 20px;
+            padding: 16px;
             min-height: 100vh;
+            color: #1f1f1f;
         }
 
         .calculator {
             max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 24px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin: 24px auto;
+            background: var(--md-sys-color-surface);
+            padding: 32px;
+            border-radius: 28px;
+            box-shadow: var(--md-elevation-2);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .calculator:hover {
+            box-shadow: var(--md-elevation-3);
         }
 
         .title {
-            color: #16a34a;
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 24px;
+            color: var(--md-sys-color-primary);
+            font-size: 32px;
+            font-weight: 500;
+            margin: 0 0 32px 0;
+            letter-spacing: -0.5px;
         }
 
         .input-group {
             margin-bottom: 32px;
+            background: var(--md-sys-color-surface-container);
+            padding: 24px;
+            border-radius: 16px;
         }
 
         .input-label {
             display: block;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 500;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
+            color: var(--md-sys-color-primary);
         }
 
         .input-wrapper {
@@ -46,25 +72,28 @@
 
         .dollar-sign {
             position: absolute;
-            left: 12px;
+            left: 16px;
             top: 50%;
             transform: translateY(-50%);
             color: #666;
+            font-size: 18px;
         }
 
         input[type="number"] {
             width: 100%;
-            padding: 8px 12px 8px 24px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 16px;
+            padding: 16px 16px 16px 32px;
+            border: 2px solid var(--md-sys-color-outline);
+            border-radius: 12px;
+            font-size: 18px;
             box-sizing: border-box;
+            transition: all 0.2s ease;
+            background: var(--md-sys-color-surface);
         }
 
         input[type="number"]:focus {
             outline: none;
-            border-color: #16a34a;
-            box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.2);
+            border-color: var(--md-sys-color-primary);
+            box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.1);
         }
 
         .impact-list {
@@ -74,97 +103,168 @@
         }
 
         .impact-item {
-            background-color: #fefce8;
-            padding: 16px;
-            border-radius: 8px;
+            background-color: var(--md-sys-color-primary-container);
+            padding: 24px;
+            border-radius: 16px;
             display: flex;
-            gap: 16px;
+            gap: 20px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .impact-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--md-elevation-1);
         }
 
         .impact-icon {
-            background-color: #fed7aa;
-            padding: 8px;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            background-color: var(--md-sys-color-secondary);
+            padding: 12px;
+            border-radius: 12px;
+            width: 48px;
+            height: 48px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .impact-content h3 {
-            color: #15803d;
+            color: var(--md-sys-color-primary);
             margin: 0 0 8px 0;
-            font-size: 18px;
+            font-size: 20px;
+            font-weight: 500;
         }
 
         .impact-description {
-            color: #4b5563;
-            margin: 0 0 8px 0;
+            color: #424242;
+            margin: 0 0 12px 0;
+            font-size: 16px;
+            line-height: 1.5;
         }
 
         .impact-calculation {
-            color: #15803d;
+            color: var(--md-sys-color-primary);
             font-weight: 500;
             margin: 0;
+            font-size: 16px;
+            background: rgba(46, 125, 50, 0.1);
+            padding: 8px 16px;
+            border-radius: 8px;
+            display: inline-block;
         }
 
         .tiers-section {
             margin-top: 32px;
-            background-color: #fefce8;
-            padding: 16px;
-            border-radius: 8px;
+            background-color: var(--md-sys-color-secondary-container);
+            padding: 24px;
+            border-radius: 16px;
         }
 
         .tiers-title {
-            color: #15803d;
-            font-weight: 600;
-            margin-bottom: 8px;
+            color: var(--md-sys-color-primary);
+            font-weight: 500;
+            margin-bottom: 16px;
+            font-size: 20px;
         }
 
         .tier-buttons {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 12px;
         }
 
         .tier-button {
-            background: white;
-            border: 1px solid #16a34a;
-            color: #16a34a;
-            padding: 8px 16px;
-            border-radius: 9999px;
+            background: var(--md-sys-color-surface);
+            border: none;
+            color: var(--md-sys-color-primary);
+            padding: 12px 24px;
+            border-radius: 100px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
+            font-size: 16px;
+            font-weight: 500;
+            box-shadow: var(--md-elevation-1);
         }
 
         .tier-button:hover {
-            background-color: #fef9c3;
+            background-color: var(--md-sys-color-primary-container);
+            box-shadow: var(--md-elevation-2);
+            transform: translateY(-1px);
+        }
+
+        .tier-button:active {
+            transform: translateY(0);
+            box-shadow: var(--md-elevation-1);
         }
 
         .footer-text {
-            margin-top: 24px;
+            margin-top: 32px;
             color: #666;
             font-size: 14px;
+            line-height: 1.6;
+            background: var(--md-sys-color-surface-container);
+            padding: 16px;
+            border-radius: 12px;
         }
 
         @media (max-width: 640px) {
             .calculator {
-                padding: 16px;
+                padding: 20px;
+                margin: 12px;
+                border-radius: 20px;
+            }
+
+            .impact-item {
+                flex-direction: column;
+                padding: 20px;
+            }
+
+            .impact-icon {
+                width: 40px;
+                height: 40px;
             }
 
             .tier-buttons {
                 justify-content: center;
             }
+
+            .title {
+                font-size: 24px;
+            }
+        }
+
+        /* Material Design state layer effects */
+        .state-layer {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .state-layer::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: currentColor;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .state-layer:hover::after {
+            opacity: 0.08;
+        }
+
+        .state-layer:active::after {
+            opacity: 0.12;
         }
     </style>
 </head>
 <body>
     <div class="calculator">
-        <h1 class="title">Your Impact at Women's Lunch Place</h1>
+        <h1 class="title">Make an Impact at Women's Lunch Place</h1>
         
         <div class="input-group">
-            <label class="input-label">Your Donation Amount:</label>
+            <label class="input-label">Your Donation Amount</label>
             <div class="input-wrapper">
                 <span class="dollar-sign">$</span>
                 <input type="number" id="donationInput" value="100" min="0">
@@ -176,7 +276,7 @@
         </div>
 
         <div class="tiers-section">
-            <h3 class="tiers-title">Suggested Donation Tiers:</h3>
+            <h3 class="tiers-title">Suggested Donation Tiers</h3>
             <div class="tier-buttons" id="tierButtons">
                 <!-- Tier buttons will be inserted here by JavaScript -->
             </div>
@@ -184,7 +284,7 @@
 
         <p class="footer-text">
             Your donation directly supports women in need through Women's Lunch Place's comprehensive support services. 
-            All contributions make an immediate difference in the lives of vulnerable women.
+            All contributions make an immediate difference in the lives of vulnerable women in our community.
         </p>
     </div>
 
@@ -226,9 +326,9 @@
             
             impactList.innerHTML = impacts.length > 0 
                 ? impacts.map(impact => `
-                    <div class="impact-item">
+                    <div class="impact-item state-layer">
                         <div class="impact-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-600">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="10"></circle>
                                 <path d="M12 6v6l4 2"></path>
                             </svg>
@@ -237,18 +337,18 @@
                             <h3>${impact.label}</h3>
                             <p class="impact-description">${impact.description}</p>
                             <p class="impact-calculation">
-                                Quantity: ${impact.count} × $${impact.amount} = $${impact.totalImpact}
+                                ${impact.count} × $${impact.amount} = $${impact.totalImpact}
                             </p>
                         </div>
                     </div>
                 `).join('')
-                : '<p style="text-align: center; color: #666; padding: 16px;">Enter a donation amount to see your impact</p>';
+                : '<p style="text-align: center; color: #666; padding: 24px;">Enter a donation amount to see your impact</p>';
         }
 
         function createTierButtons() {
             const tierButtons = document.getElementById('tierButtons');
             tierButtons.innerHTML = impactTiers.map(tier => `
-                <button class="tier-button" onclick="setDonation(${tier.amount})">
+                <button class="tier-button state-layer" onclick="setDonation(${tier.amount})">
                     $${tier.amount}
                 </button>
             `).join('');
