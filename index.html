@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Women's Lunch Place - Donation Impact Calculator</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/14.0.0/material-components-web.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -125,6 +124,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            color: var(--md-sys-color-primary);
         }
 
         .impact-content h3 {
@@ -168,21 +168,24 @@
 
         .tier-buttons {
             display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
+            flex-wrap: nowrap;
+            gap: 8px;
+            justify-content: space-between;
         }
 
         .tier-button {
             background: var(--md-sys-color-surface);
             border: none;
             color: var(--md-sys-color-primary);
-            padding: 12px 24px;
+            padding: 8px 16px;
             border-radius: 100px;
             cursor: pointer;
             transition: all 0.2s ease;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 500;
             box-shadow: var(--md-elevation-1);
+            white-space: nowrap;
+            flex: 0 1 auto;
         }
 
         .tier-button:hover {
@@ -224,7 +227,13 @@
             }
 
             .tier-buttons {
+                flex-wrap: wrap;
                 justify-content: center;
+            }
+
+            .tier-button {
+                padding: 12px 24px;
+                font-size: 16px;
             }
 
             .title {
@@ -232,7 +241,6 @@
             }
         }
 
-        /* Material Design state layer effects */
         .state-layer {
             position: relative;
             overflow: hidden;
@@ -300,6 +308,47 @@
             { amount: 25, label: "Safe Transportation", description: "Secures transportation to shelter" }
         ];
 
+        const iconMap = {
+            2500: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                   </svg>`,
+            1000: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                   </svg>`,
+            750: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                   <path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"></path>
+                  </svg>`,
+            500: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                   <path d="M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 1.05-1.54 5 5 0 0 1 7.08 0A5.11 5.11 0 0 1 16.59 6 4 4 0 0 1 18 13.87V21H6Z"></path>
+                   <line x1="6" y1="17" x2="18" y2="17"></line>
+                  </svg>`,
+            250: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                   <path d="M3 3h18v18H3zM12 8v8"></path>
+                   <path d="M8 12h8"></path>
+                  </svg>`,
+            100: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                   <path d="M2 12h20"></path>
+                   <path d="M7 5l5 7-5 7"></path>
+                   <path d="M17 5l5 7-5 7"></path>
+                  </svg>`,
+            50: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 7h-7"></path>
+                  <path d="M14 7V3"></path>
+                  <path d="M14 11V7"></path>
+                  <path d="M9 12v5"></path>
+                  <path d="M9 12H4"></path>
+                  <path d="M4 7v10"></path>
+                  <path d="M20 7v10"></path>
+                  <path d="M9 17h11"></path>
+                 </svg>`,
+            25: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="M12 6v12"></path>
+                  <path d="M6 12h12"></path>
+                 </svg>`
+        };
+
         function calculateImpact(amount) {
             const impact = [];
             let remainingAmount = amount;
@@ -328,10 +377,7 @@
                 ? impacts.map(impact => `
                     <div class="impact-item state-layer">
                         <div class="impact-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <path d="M12 6v6l4 2"></path>
-                            </svg>
+                            ${iconMap[impact.amount]}
                         </div>
                         <div class="impact-content">
                             <h3>${impact.label}</h3>
