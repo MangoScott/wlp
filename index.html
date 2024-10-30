@@ -4,129 +4,265 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Women's Lunch Place - Donation Impact Calculator</title>
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- React and ReactDOM -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-    
-    <!-- Babel for JSX -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
-    
-    <!-- Lucide Icons -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .calculator {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .title {
+            color: #16a34a;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 24px;
+        }
+
+        .input-group {
+            margin-bottom: 32px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .dollar-sign {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 8px 12px 8px 24px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #16a34a;
+            box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.2);
+        }
+
+        .impact-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .impact-item {
+            background-color: #fefce8;
+            padding: 16px;
+            border-radius: 8px;
+            display: flex;
+            gap: 16px;
+        }
+
+        .impact-icon {
+            background-color: #fed7aa;
+            padding: 8px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .impact-content h3 {
+            color: #15803d;
+            margin: 0 0 8px 0;
+            font-size: 18px;
+        }
+
+        .impact-description {
+            color: #4b5563;
+            margin: 0 0 8px 0;
+        }
+
+        .impact-calculation {
+            color: #15803d;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        .tiers-section {
+            margin-top: 32px;
+            background-color: #fefce8;
+            padding: 16px;
+            border-radius: 8px;
+        }
+
+        .tiers-title {
+            color: #15803d;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .tier-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tier-button {
+            background: white;
+            border: 1px solid #16a34a;
+            color: #16a34a;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tier-button:hover {
+            background-color: #fef9c3;
+        }
+
+        .footer-text {
+            margin-top: 24px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        @media (max-width: 640px) {
+            .calculator {
+                padding: 16px;
+            }
+
+            .tier-buttons {
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
-<body class="bg-gray-100 min-h-screen py-8">
-    <div id="root"></div>
+<body>
+    <div class="calculator">
+        <h1 class="title">Your Impact at Women's Lunch Place</h1>
+        
+        <div class="input-group">
+            <label class="input-label">Your Donation Amount:</label>
+            <div class="input-wrapper">
+                <span class="dollar-sign">$</span>
+                <input type="number" id="donationInput" value="100" min="0">
+            </div>
+        </div>
 
-    <script type="text/babel">
-        const { useState } = React;
-        const { Home, Utensils, Car, Shirt, Hotel, Box, Shield } = window.lucide;
+        <div id="impactList" class="impact-list">
+            <!-- Impact items will be inserted here by JavaScript -->
+        </div>
 
-        const ImpactCalculator = () => {
-            const [donationAmount, setDonationAmount] = useState(100);
+        <div class="tiers-section">
+            <h3 class="tiers-title">Suggested Donation Tiers:</h3>
+            <div class="tier-buttons" id="tierButtons">
+                <!-- Tier buttons will be inserted here by JavaScript -->
+            </div>
+        </div>
 
-            const impactTiers = [
-                { amount: 2500, icon: Home, label: "Housing Stabilization", description: "Prevents eviction and stabilizes housing situation" },
-                { amount: 1000, icon: Box, label: "Direct Care Essentials", description: "One year of essentials for two women" },
-                { amount: 750, icon: Shirt, label: "Emergency Clothing", description: "Supplies emergency clothing to 10 women" },
-                { amount: 500, icon: Utensils, label: "Daily Meals", description: "Sponsors a day of healthy lunch for all guests" },
-                { amount: 250, icon: Box, label: "Housing Necessities", description: "Funds necessities for one newly-housed guest" },
-                { amount: 100, icon: Hotel, label: "Emergency Accommodation", description: "Supports one night at a hotel" },
-                { amount: 50, icon: Shield, label: "Weather Protection", description: "Provides a new raincoat or winter jacket" },
-                { amount: 25, icon: Car, label: "Safe Transportation", description: "Secures transportation to shelter" }
-            ];
+        <p class="footer-text">
+            Your donation directly supports women in need through Women's Lunch Place's comprehensive support services. 
+            All contributions make an immediate difference in the lives of vulnerable women.
+        </p>
+    </div>
 
-            const calculateImpact = (amount) => {
-                const impact = [];
-                let remainingAmount = amount;
+    <script>
+        const impactTiers = [
+            { amount: 2500, label: "Housing Stabilization", description: "Prevents eviction and stabilizes housing situation" },
+            { amount: 1000, label: "Direct Care Essentials", description: "One year of essentials for two women" },
+            { amount: 750, label: "Emergency Clothing", description: "Supplies emergency clothing to 10 women" },
+            { amount: 500, label: "Daily Meals", description: "Sponsors a day of healthy lunch for all guests" },
+            { amount: 250, label: "Housing Necessities", description: "Funds necessities for one newly-housed guest" },
+            { amount: 100, label: "Emergency Accommodation", description: "Supports one night at a hotel" },
+            { amount: 50, label: "Weather Protection", description: "Provides a new raincoat or winter jacket" },
+            { amount: 25, label: "Safe Transportation", description: "Secures transportation to shelter" }
+        ];
 
-                for (const tier of impactTiers) {
-                    const count = Math.floor(remainingAmount / tier.amount);
-                    if (count > 0) {
-                        impact.push({
-                            ...tier,
-                            count,
-                            totalImpact: count * tier.amount
-                        });
-                        remainingAmount -= count * tier.amount;
-                    }
+        function calculateImpact(amount) {
+            const impact = [];
+            let remainingAmount = amount;
+
+            for (const tier of impactTiers) {
+                const count = Math.floor(remainingAmount / tier.amount);
+                if (count > 0) {
+                    impact.push({
+                        ...tier,
+                        count,
+                        totalImpact: count * tier.amount
+                    });
+                    remainingAmount -= count * tier.amount;
                 }
+            }
 
-                return impact;
-            };
+            return impact;
+        }
 
-            const impacts = calculateImpact(donationAmount);
-
-            return (
-                <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-lg">
-                    <h2 className="text-2xl font-bold mb-6 text-green-600">Your Impact at Women's Lunch Place</h2>
-                    
-                    <div className="mb-8">
-                        <label className="block text-sm font-medium mb-2">
-                            Your Donation Amount:
-                        </label>
-                        <div className="relative">
-                            <span className="absolute left-3 top-2 text-gray-500">$</span>
-                            <input
-                                type="number"
-                                value={donationAmount}
-                                onChange={(e) => setDonationAmount(Math.max(0, Number(e.target.value)))}
-                                className="w-full pl-8 pr-4 py-2 border rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                                min="0"
-                            />
+        function updateImpactDisplay() {
+            const amount = Number(document.getElementById('donationInput').value);
+            const impacts = calculateImpact(amount);
+            const impactList = document.getElementById('impactList');
+            
+            impactList.innerHTML = impacts.length > 0 
+                ? impacts.map(impact => `
+                    <div class="impact-item">
+                        <div class="impact-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-600">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M12 6v6l4 2"></path>
+                            </svg>
                         </div>
-                    </div>
-
-                    <div className="space-y-4">
-                        {impacts.length > 0 ? (
-                            impacts.map((impact, index) => (
-                                <div key={index} className="p-4 bg-yellow-50 rounded-lg flex items-start gap-4">
-                                    <div className="p-2 bg-yellow-100 rounded-full">
-                                        <impact.icon className="text-green-600" size={24} />
-                                    </div>
-                                    <div className="flex-1">
-                                        <h3 className="font-semibold text-lg text-green-700">{impact.label}</h3>
-                                        <p className="text-gray-600">{impact.description}</p>
-                                        <p className="mt-2 text-green-700 font-medium">
-                                            Quantity: {impact.count} × ${impact.amount} = ${impact.totalImpact}
-                                        </p>
-                                    </div>
-                                </div>
-                            ))
-                        ) : (
-                            <p className="text-center text-gray-500 py-4">
-                                Enter a donation amount to see your impact
+                        <div class="impact-content">
+                            <h3>${impact.label}</h3>
+                            <p class="impact-description">${impact.description}</p>
+                            <p class="impact-calculation">
+                                Quantity: ${impact.count} × $${impact.amount} = $${impact.totalImpact}
                             </p>
-                        )}
-                    </div>
-
-                    <div className="mt-8 p-4 bg-yellow-50 rounded-lg">
-                        <h3 className="font-semibold mb-2 text-green-700">Suggested Donation Tiers:</h3>
-                        <div className="flex flex-wrap gap-2">
-                            {impactTiers.map((tier, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => setDonationAmount(tier.amount)}
-                                    className="px-4 py-2 bg-white rounded-full text-green-600 hover:bg-yellow-100 border border-green-200 text-sm transition-colors"
-                                >
-                                    ${tier.amount}
-                                </button>
-                            ))}
                         </div>
                     </div>
+                `).join('')
+                : '<p style="text-align: center; color: #666; padding: 16px;">Enter a donation amount to see your impact</p>';
+        }
 
-                    <p className="mt-6 text-sm text-gray-600">
-                        Your donation directly supports women in need through Women's Lunch Place's comprehensive support services. All contributions make an immediate difference in the lives of vulnerable women.
-                    </p>
-                </div>
-            );
-        };
+        function createTierButtons() {
+            const tierButtons = document.getElementById('tierButtons');
+            tierButtons.innerHTML = impactTiers.map(tier => `
+                <button class="tier-button" onclick="setDonation(${tier.amount})">
+                    $${tier.amount}
+                </button>
+            `).join('');
+        }
 
-        // Render the app
-        ReactDOM.render(<ImpactCalculator />, document.getElementById('root'));
+        function setDonation(amount) {
+            document.getElementById('donationInput').value = amount;
+            updateImpactDisplay();
+        }
+
+        // Initialize the calculator
+        document.getElementById('donationInput').addEventListener('input', updateImpactDisplay);
+        createTierButtons();
+        updateImpactDisplay();
     </script>
 </body>
 </html>
